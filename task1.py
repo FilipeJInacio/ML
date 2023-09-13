@@ -1,6 +1,6 @@
 import numpy as np
 
-
+# n amostras, 10 dimensiões
 small_x = np.load("X_train_regression1.npy")
 y = np.load("y_train_regression1.npy")
 big_x = np.hstack((np.ones((len(small_x), 1)), small_x))
@@ -12,5 +12,10 @@ print("Beta 0: %.4f" % beta[0][0])
 print("Beta 1: %.2f" % beta[1][0])
 print("Associated Error is: %.4f" % SSE)
 
-print("Predicted value for 25: %.2f" % (beta[0][0] + beta[1][0] * 25))
-print("Predicted value for 34: %.2f" % (beta[0][0] + beta[1][0] * 34))
+test_matrix = np.load("X_test_regression1.npy")
+
+for i in test_matrix:
+    for x_test in i:
+        print("Predicted value for:", x_test)
+        print(beta[0][0] + beta[1][0] * x_test)
+        print("\n")
