@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.linear_model import Lasso, Ridge
 
 # n amostras, 10 dimensiões
 small_x = np.load("X_train_regression1.npy")
@@ -12,10 +13,17 @@ print("Beta 0: %.4f" % beta[0][0])
 print("Beta 1: %.2f" % beta[1][0])
 print("Associated Error is: %.4f" % SSE)
 
-test_matrix = np.load("X_test_regression1.npy")
+lasso = Lasso(alpha=0.005)
+ridge = Ridge(alpha=0.005)
+lasso.fit(small_x, y)
+ridge.fit(small_x, y)
 
-for i in test_matrix:
-    for x_test in i:
-        print("Predicted value for:", x_test)
-        print(beta[0][0] + beta[1][0] * x_test)
-        print("\n")
+test_matrix = np.load("X_test_regression1.npy")
+print(" R squared ", round(lasso.score(small_x, y) * 100, 2))
+print(" R squared ", round(ridge.score(small_x, y) * 100, 2))
+
+# for i in test_matrix:
+#    for x_test in i:
+#        print("Predicted value for:", x_test)
+#        print(beta[0][0] + beta[1][0] * x_test)
+#        print("\n")
