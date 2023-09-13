@@ -3,13 +3,13 @@ import numpy as np
 
 x = np.load("X_train_regression1.npy")
 y = np.load("y_train_regression1.npy")
-X = np.hstack((np.ones((3, 1)), x))
+X = np.hstack((np.ones((len(x), 1)), x))
 
-print(x.shape , y.shape)
+beta = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y)
 
-print(X)
+SSE = np.sum((np.linalg.norm(y - X.dot(beta))) ** 2)
 
-
+print(SSE)
 
 """
 small_x = np.array([[24], [30], [36]])
