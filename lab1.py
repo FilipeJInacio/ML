@@ -1,5 +1,17 @@
 import numpy as np
 
+
+x = np.load("X_train_regression1.npy")
+y = np.load("y_train_regression1.npy")
+X = np.hstack((np.ones((3, 1)), x))
+
+print(x.shape , y.shape)
+
+print(X)
+
+
+
+"""
 small_x = np.array([[24], [30], [36]])
 y = np.array([[13], [14], [16]])
 big_x = np.hstack((np.ones((3, 1)), small_x))
@@ -15,3 +27,4 @@ print("Associated Error is: %.4f" % SSE)
 
 print("Predicted value for 25: %.2f" % (beta[0][0] + beta[1][0] * 25))
 print("Predicted value for 34: %.2f" % (beta[0][0] + beta[1][0] * 34))
+"""
