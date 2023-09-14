@@ -19,14 +19,7 @@ big_x = np.hstack((np.ones((len(small_x), 1)), small_x))
 # print(y)
 
 beta = np.linalg.inv(big_x.T.dot(big_x)).dot(big_x.T).dot(y)
-
-beta_t = np.transpose(beta)
-
 SSE = np.sum((np.linalg.norm(y - big_x.dot(beta))) ** 2)
-
-big_x_t = np.transpose(big_x)
-
-print(big_x.shape)
 
 ###################################
 
@@ -35,13 +28,12 @@ print(big_x.shape)
 
 ###################################
 
-expected_y = beta.T.dot(big_x.T)
-print(expected_y)
+expected_y = big_x.dot(beta)
+print("Predictor Results: \n"y)
+print("\n")
+print("Acutal Results: \n"expected_y)
 
 print("\n")
-
-print("Beta 0: %.4f" % beta[0][0])
-print("Beta 1: %.2f" % beta[1][0])
 print("Associated Error is: %.4f" % SSE)
 
 lasso = Lasso(alpha=0.005)
@@ -50,8 +42,8 @@ lasso.fit(small_x, y)
 ridge.fit(small_x, y)
 
 test_matrix = np.load("X_test_regression1.npy")
-print(" R squared ", round(lasso.score(small_x, y) * 100, 2))
-print(" R squared ", round(ridge.score(small_x, y) * 100, 2))
+#print(" R squared ", round(lasso.score(small_x, y) * 100, 2))
+#print(" R squared ", round(ridge.score(small_x, y) * 100, 2))
 
 # for i in test_matrix:
 #    for x_test in i:
