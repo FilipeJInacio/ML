@@ -1,6 +1,15 @@
 import numpy as np
 from sklearn.linear_model import Lasso, Ridge
 
+###########################################################
+
+#   - Experimentar Ridge e Lasso
+#   - Experimentar Cross Validation e Leave One Out
+#   - Ter cuidado com over-adjustement
+#   - Diferenciar trabalho da task2 com a task1
+
+###########################################################
+
 # n amostras, 10 dimensiões
 small_x = np.load("X_train_regression1.npy")
 y = np.load("y_train_regression1.npy")
