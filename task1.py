@@ -29,9 +29,9 @@ SSE = np.sum((np.linalg.norm(y - big_x.dot(beta))) ** 2)
 ###################################
 
 expected_y = big_x.dot(beta)
-print("Predictor Results: \n", y)
+print("Predictor Results: \n", expected_y)
 print("\n")
-print("Acutal Results: \n", expected_y)
+print("Actual Results: \n", y)
 
 print("\n")
 print("Associated Error is: %.4f" % SSE)
@@ -41,9 +41,13 @@ ridge = Ridge(alpha=0.005)
 lasso.fit(small_x, y)
 ridge.fit(small_x, y)
 
-test_matrix = np.load("X_test_regression1.npy")
+small_x_test = np.load("X_test_regression1.npy")
 # print(" R squared ", round(lasso.score(small_x, y) * 100, 2))
 # print(" R squared ", round(ridge.score(small_x, y) * 100, 2))
+
+big_x_test = np.hstack((np.ones((len(small_x_test), 1)), small_x_test))
+expected_y_test = big_x_test.dot(beta)
+print("Predictor Results: \n", expected_y_test)
 
 # for i in test_matrix:
 #    for x_test in i:
