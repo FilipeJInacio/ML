@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib as plot
-from sklearn.linear_model import Lasso, Ridge
+from sklearn.linear_model import Lasso, Ridge, LassoCV, RidgeCV
 
 ###########################################################
 
@@ -27,9 +27,18 @@ print("\n")
 print("Associated Error is: %.4f" % SSE)
 
 lasso = Lasso(alpha=0.005)
+lasso_cv = LassoCV(n_alphas=3)
 ridge = Ridge(alpha=0.005)
+ridge_cv = RidgeCV()
 lasso.fit(small_x, y)
+lasso_cv.fit(small_x, y)
 ridge.fit(small_x, y)
+ridge_cv.fit(small_x, y)
+
+print(lasso.predict(small_x))
+print(ridge.predict(small_x))
+print(lasso_cv.predict(small_x))
+print(ridge_cv.predict(small_x))
 
 small_x_test = np.load("X_test_regression1.npy")
 # print(" R squared ", round(lasso.score(small_x, y) * 100, 2))
