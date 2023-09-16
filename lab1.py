@@ -15,3 +15,5 @@ print("Associated Error is: %.4f" % SSE)
 
 print("Predicted value for 25: %.2f" % (beta[0][0] + beta[1][0] * 25))
 print("Predicted value for 34: %.2f" % (beta[0][0] + beta[1][0] * 34))
+
+# hello world
