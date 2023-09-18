@@ -11,7 +11,7 @@ from sklearn.linear_model import Lasso, Ridge, LassoCV, RidgeCV
 
 ###########################################################
 
-# n amostras, 10 dimensiões
+# n amostras, 10 dimensões
 x = np.load("X_train_regression1.npy")
 y = np.load("y_train_regression1.npy")
 design_matrix = np.hstack((np.ones((len(x), 1)), x))
@@ -41,8 +41,10 @@ print(lasso_cv.predict(x))
 print(ridge_cv.predict(x))
 
 x_test = np.load("X_test_regression1.npy")
-# print(" R squared ", round(lasso.score(x, y) * 100, 2))
-# print(" R squared ", round(ridge.score(x, y) * 100, 2))
+print(" R squared Lasso is", round(lasso.score(x, y), 5))
+print(" R squared Ridge is", round(ridge.score(x, y), 5))
+print(" R squared LassoCV is", round(lasso_cv.score(x, y), 5))
+print(" R squared RidgeCV is", round(ridge_cv.score(x, y), 5))
 
 design_matrix_test = np.hstack((np.ones((len(x_test), 1)), x_test))
 expected_y_test = design_matrix_test.dot(beta)
