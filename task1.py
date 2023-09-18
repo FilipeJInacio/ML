@@ -37,7 +37,7 @@ plt.rcParams["font.family"] = "serif"
 
 # n amostras, 10 dimensões
 # Set up alpha values
-alphas = np.linspace(0.01, 1.0, 500)
+alphas = np.linspace(0.0001, 0.001, 500)
 r_values_lasso = []
 r_values_ridge = []
 x = np.load("X_train_regression1.npy")
@@ -70,8 +70,8 @@ for alpha in alphas:
 # print(ridge_cv.predict(x))
 
 x_test = np.load("X_test_regression1.npy")
-print(" R squared Lasso is", round(lasso.score(x, y), 5))
-print(" R squared Ridge is", round(ridge.score(x, y), 5))
+# print(" R squared Lasso is", round(lasso.score(x, y), 5))
+# print(" R squared Ridge is", round(ridge.score(x, y), 5))
 # print(" R squared LassoCV is", round(lasso_cv.score(x, y), 5))
 # print(" R squared RidgeCV is", round(ridge_cv.score(x, y), 5))
 
@@ -80,11 +80,19 @@ expected_y_test = design_matrix_test.dot(beta)
 # print("Predictor Results: \n", expected_y_test)
 
 # Plot R-squared values for Lasso and Ridge
-plt.plot(alphas, r_values_lasso, label=r"Lasso")
-plt.plot(alphas, r_values_ridge, label=r"Ridge")
+plt.figure()
+plt.plot(alphas, r_values_lasso, label=r"Lasso", color="green", linewidth=3, alpha=0.6)
 plt.xlabel(r"\textbf{Alpha [$\alpha$]}")
 plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
-plt.title(r"R-squared vs Alpha for Lasso and Ridge")
-plt.legend()
+plt.title(r"\textbf{Coefficient of Lasso Regression}")
+plt.grid(True)
+# plt.legend()
+
+plt.figure()
+plt.plot(alphas, r_values_ridge, label=r"Ridge", color="orange", linewidth=3, alpha=0.6)
+plt.xlabel(r"\textbf{Alpha [$\alpha$]}")
+plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
+plt.title(r"\textbf{Coefficient of Ridge Regression}")
 plt.grid(True)
 plt.show()
+# plt.legend()
