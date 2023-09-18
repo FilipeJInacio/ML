@@ -20,6 +20,9 @@ mpl.rcParams[
 # Enable LaTeX rendering
 rc("text", usetex=True)
 
+# Set font family to use LaTeX fonts
+plt.rcParams["font.family"] = "serif"
+
 ###########################################################
 
 #   - Experimentar Ridge e Lasso -- Kinda done
@@ -83,4 +86,5 @@ plt.xlabel(r"\textbf{Alpha [$\alpha$]}")
 plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
 plt.title(r"R-squared vs Alpha for Lasso and Ridge")
 plt.legend()
+plt.grid(True)
 plt.show()
