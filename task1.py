@@ -23,11 +23,12 @@ plt.rcParams["font.family"] = "serif"
 #   - Calcular R squared da Regressão Linear normal - conseguir a média dos y's para a variância e depois fazer o somatório pela expressão
 #   - Para calcular os parâmetros alpha de cada modelo scikitlearn, existe uma função para a sua determinação mas fazendo um gráfico do erro em função
 #   do alpha é a maneira recomendada pelo professor. No entanto no final usar a função para validar o valor obtido
+#   - Aumentar o n polinomial
 
 ###########################################################
 
 # n amostras, 10 dimensões
-alphas = np.linspace(0.0001, 0.001, 500)
+alphas = np.linspace(0.00001, 10, 500)
 r_values_lasso = []
 r_values_ridge = []
 x = np.load("X_train_regression1.npy")
