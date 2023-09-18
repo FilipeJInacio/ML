@@ -4,7 +4,7 @@ from sklearn.linear_model import Lasso, Ridge, LassoCV, RidgeCV
 
 ###########################################################
 
-#   - Experimentar Ridge e Lasso
+#   - Experimentar Ridge e Lasso -- Kinda done
 #   - Experimentar Cross Validation e Leave One Out
 #   - Ter cuidado com over-adjustement
 #   - Diferenciar trabalho da task2 com a task1
@@ -16,7 +16,7 @@ x = np.load("X_train_regression1.npy")
 y = np.load("y_train_regression1.npy")
 design_matrix = np.hstack((np.ones((len(x), 1)), x))
 beta = np.linalg.inv(design_matrix.T.dot(design_matrix)).dot(design_matrix.T).dot(y)
-SSE = np.sum((np.linalg.norm(y - design_matrix.dot(beta))) ** 2)
+sse = np.sum((np.linalg.norm(y - design_matrix.dot(beta))) ** 2)
 
 expected_y = design_matrix.dot(beta)
 print("Predictor Results: \n", expected_y)
@@ -24,7 +24,7 @@ print("\n")
 print("Actual Results: \n", y)
 
 print("\n")
-print("Associated Error is: %.4f" % SSE)
+print("Associated Error is: %.4f" % sse)
 
 lasso = Lasso(alpha=0.005)
 lasso_cv = LassoCV(n_alphas=3)
