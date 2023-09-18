@@ -6,21 +6,12 @@ from sklearn.linear_model import Lasso, Ridge, LassoCV, RidgeCV
 import matplotlib as mpl
 from matplotlib import rc
 
-# Add the path to the 'latex' executable to the PATH
+# LaTex Stuff
 latex_path = "/usr/local/texlive/2023/bin/x86_64-linux"
 os.environ["PATH"] = f"{latex_path}:{os.environ['PATH']}"
-
-
-# Configure Matplotlib to use LaTeX for rendering
 mpl.rcParams["text.usetex"] = True
-mpl.rcParams[
-    "text.latex.preamble"
-] = r"\usepackage{amsmath}"  # You can add more packages if needed
-
-# Enable LaTeX rendering
+mpl.rcParams["text.latex.preamble"] = r"\usepackage{amsmath}"
 rc("text", usetex=True)
-
-# Set font family to use LaTeX fonts
 plt.rcParams["font.family"] = "serif"
 
 ###########################################################
@@ -36,7 +27,6 @@ plt.rcParams["font.family"] = "serif"
 ###########################################################
 
 # n amostras, 10 dimensões
-# Set up alpha values
 alphas = np.linspace(0.0001, 0.001, 500)
 r_values_lasso = []
 r_values_ridge = []
@@ -79,7 +69,6 @@ design_matrix_test = np.hstack((np.ones((len(x_test), 1)), x_test))
 expected_y_test = design_matrix_test.dot(beta)
 # print("Predictor Results: \n", expected_y_test)
 
-# Plot R-squared values for Lasso and Ridge
 plt.figure()
 plt.plot(alphas, r_values_lasso, label=r"Lasso", color="green", linewidth=3, alpha=0.6)
 plt.xlabel(r"\textbf{Alpha [$\alpha$]}")
