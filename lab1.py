@@ -1,14 +1,14 @@
 import numpy as np
 
-small_x = np.array([[24], [30], [36]])
+x = np.array([[24], [30], [36]])
 y = np.array([[13], [14], [16]])
-big_x = np.hstack((np.ones((3, 1)), small_x))
+design_matrix = np.hstack((np.ones((3, 1)), x))
 
 beta = np.array([[0], [0]])
 
-beta = np.linalg.inv(big_x.T.dot(big_x)).dot(big_x.T).dot(y)
+beta = np.linalg.inv(design_matrix.T.dot(design_matrix)).dot(design_matrix.T).dot(y)
 
-SSE = np.sum((np.linalg.norm(y - big_x.dot(beta))) ** 2)
+SSE = np.sum((np.linalg.norm(y - design_matrix.dot(beta))) ** 2)
 print("Beta 0: %.4f" % beta[0][0])
 print("Beta 1: %.2f" % beta[1][0])
 print("Associated Error is: %.4f" % SSE)
