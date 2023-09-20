@@ -26,6 +26,8 @@ plt.rcParams["font.family"] = "serif"
 #   - Aumentar o n polinomial
 #   - Lasso: 0 =< Alpha =< 1.2825
 #   - Valor mais alto para ambos os alphas é near zero (?)
+#   - Pedir ao professor para ajudar a categorizar formulações de problemas
+#   - Dificuldade em identificar least squares
 
 ###########################################################
 
