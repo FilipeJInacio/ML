@@ -24,11 +24,15 @@ plt.rcParams["font.family"] = "serif"
 #   - Para calcular os parâmetros alpha de cada modelo scikitlearn, existe uma função para a sua determinação mas fazendo um gráfico do erro em função
 #   do alpha é a maneira recomendada pelo professor. No entanto no final usar a função para validar o valor obtido
 #   - Aumentar o n polinomial
+#   - Lasso: 0 =< Alpha =< 1.2825
+#   - Valor mais alto para ambos os alphas é near zero (?)
 
 ###########################################################
 
 # n amostras, 10 dimensões
-alphas = np.linspace(0.00001, 10, 500)
+alphas = np.linspace(
+    0.00000001, 0.001, 5000
+)  # (valor inicial, valor final, n.º de prontos)
 r_values_lasso = []
 r_values_ridge = []
 x = np.load("X_train_regression1.npy")
@@ -70,19 +74,25 @@ design_matrix_test = np.hstack((np.ones((len(x_test), 1)), x_test))
 expected_y_test = design_matrix_test.dot(beta)
 # print("Predictor Results: \n", expected_y_test)
 
+max_alpha = max(r_values_ridge)
+print(max_alpha)
+print(r_values_ridge)
+
 plt.figure()
 plt.plot(alphas, r_values_lasso, label=r"Lasso", color="green", linewidth=3, alpha=0.6)
 plt.xlabel(r"\textbf{Alpha [$\alpha$]}")
-plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
-plt.title(r"\textbf{Coefficient of Lasso Regression}")
+# plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
+plt.title(r"\textbf{Lasso - Coefficient of Determination [$R^2$]}")
 plt.grid(True)
+plt.savefig("/home/user/lasso.eps", format="eps", dpi=300, bbox_inches="tight")
 # plt.legend()
 
 plt.figure()
 plt.plot(alphas, r_values_ridge, label=r"Ridge", color="orange", linewidth=3, alpha=0.6)
 plt.xlabel(r"\textbf{Alpha [$\alpha$]}")
-plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
-plt.title(r"\textbf{Coefficient of Ridge Regression}")
+# plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
+plt.title(r"\textbf{Ridge - Coefficient of Determination [$R^2$]}")
 plt.grid(True)
+plt.savefig("/home/user/ridge.eps", format="eps", dpi=300, bbox_inches="tight")
 plt.show()
 # plt.legend()
