@@ -3,13 +3,15 @@ from sklearn.linear_model import LinearRegression,Ridge,Lasso
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import cross_val_score, KFold
 import math
+from itertools import combinations
+import time
 
-
+from data_spliter import split_data
 
 x = np.load("X_train_regression1.npy")
 y = np.load("y_train_regression1.npy")
 
-method = 8
+method = 9
 
 if method == 1 or method == 0:
     X = np.hstack((np.ones((len(x), 1)), x))
@@ -125,3 +127,30 @@ if method == 8 or method == 0:
     print(f"R2: {values}")
     print(sum(values) / len(values))
         
+if method == 9 or method == 0:
+    
+    values = []
+    subset_sizes = [1]
+    
+    # Alphas values
+    start = 0.1
+    end = 1
+    step = 0.1
+    alphas = np.arange(start, end + step, step)
+    
+    for alpha in alphas:
+        ridge = Ridge(alpha=alpha)
+        
+        for subset_size in subset_sizes:
+            x_test, x_train, y_test, y_train = split_data(x, y, subset_size)
+ 
+            values2 = []
+            for i in range(len(x_test)):
+                ridge.fit(x_train[i], y_train[i])
+                values2.append(ridge.score(x_test[i], y_test[i]))
+            values.append([alpha,subset_size,sum(values2) / len(values2)])
+                
+        with open("ridge_crossV.txt", "w") as file:
+            for alpha,subset_size,value in values:
+                file.write(f"{alpha}\t{subset_size}\t{value}\n")
+                
