@@ -130,27 +130,36 @@ if method == 8 or method == 0:
 if method == 9 or method == 0:
     
     values = []
-    subset_sizes = [1]
+    subset_sizes = [2]
     
     # Alphas values
-    start = 0.1
-    end = 1
-    step = 0.1
+    start = 0.01
+    end = 1000
+    step = 0.01
     alphas = np.arange(start, end + step, step)
     
-    for alpha in alphas:
-        ridge = Ridge(alpha=alpha)
-        
-        for subset_size in subset_sizes:
-            x_test, x_train, y_test, y_train = split_data(x, y, subset_size)
- 
+    for subset_size in subset_sizes:
+        x_test, x_train, y_test, y_train = split_data(x, y, subset_size)
+    
+        for alpha in alphas:
+            ridge = Ridge(alpha=alpha)
+            
             values2 = []
             for i in range(len(x_test)):
                 ridge.fit(x_train[i], y_train[i])
-                values2.append(ridge.score(x_test[i], y_test[i]))
-            values.append([alpha,subset_size,sum(values2) / len(values2)])
+                y_pred = ridge.predict(x_test[i])**2
+                values2.append([r2_score(y_test[i], y_pred),np.sum((y_test[i] - y_pred)**2)])
+            
+            
+            values.append([alpha,subset_size,sum(values2[:][0]) / len(values2[:][0]), sum(values2[:][1]) / len(values2[:][1])])
                 
-        with open("ridge_crossV.txt", "w") as file:
-            for alpha,subset_size,value in values:
-                file.write(f"{alpha}\t{subset_size}\t{value}\n")
-                
+        
+    
+    print("=============Cross Validation=============")
+    print(values)
+
+    
+    with open("ridge_crossV.txt", "w") as file:
+        for alpha,subset_size,value1,value2 in values:
+            file.write(f"{alpha}\t{subset_size}\t{value1}\t{value2}\n")
+    
