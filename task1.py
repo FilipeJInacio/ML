@@ -1,42 +1,11 @@
 import numpy as np
-import os
-
-import matplotlib.pyplot as plt
-from sklearn.linear_model import Lasso, Ridge, LassoCV, RidgeCV
-import matplotlib as mpl
-from matplotlib import rc
-
-# LaTex Stuff
-latex_path = "/usr/local/texlive/2023/bin/x86_64-linux"
-os.environ["PATH"] = f"{latex_path}:{os.environ['PATH']}"
-mpl.rcParams["text.usetex"] = True
-mpl.rcParams["text.latex.preamble"] = r"\usepackage{amsmath}"
-rc("text", usetex=True)
-plt.rcParams["font.family"] = "serif"
-
-###########################################################
-
-#   - Experimentar Ridge e Lasso -- Kinda done
-#   - Experimentar Cross Validation e Leave One Out
-#   - Ter cuidado com over-adjustement
-#   - Diferenciar trabalho da task2 com a task1. Radial Basis Functions for task2 (?)
-#   - Calcular R squared da Regressão Linear normal - conseguir a média dos y's para a variância e depois fazer o somatório pela expressão
-#   - Para calcular os parâmetros alpha de cada modelo scikitlearn, existe uma função para a sua determinação mas fazendo um gráfico do erro em função
-#   do alpha é a maneira recomendada pelo professor. No entanto no final usar a função para validar o valor obtido
-#   - Aumentar o n polinomial
-#   - Lasso: 0 =< Alpha =< 1.2825
-#   - Valor mais alto para ambos os alphas é near zero (?)
-#   - Pedir ao professor para ajudar a categorizar formulações de problemas
-#   - Dificuldade em identificar least squares
-
-###########################################################
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import cross_validate, cross_val_score, GridSearchCV
 
 # n amostras, 10 dimensões
 alphas = np.linspace(
     0.00000001, 0.001, 5000
 )  # (valor inicial, valor final, n.º de prontos)
-r_values_lasso = []
-r_values_ridge = []
 x = np.load("X_train_regression1.npy")
 y = np.load("y_train_regression1.npy")
 design_matrix = np.hstack((np.ones((len(x), 1)), x))
@@ -51,50 +20,24 @@ print("Actual Results: \n", y)
 print("\n")
 print("Associated Error is: %.4f" % sse)
 
-for alpha in alphas:
-    lasso = Lasso(alpha=alpha)
-    ridge = Ridge(alpha=alpha)
-
-    lasso.fit(x, y)
-    ridge.fit(x, y)
-
-    r_values_lasso.append(lasso.score(x, y))
-    r_values_ridge.append(ridge.score(x, y))
-
-# print(lasso.predict(x))
-# print(ridge.predict(x))
-# print(lasso_cv.predict(x))
-# print(ridge_cv.predict(x))
-
-x_test = np.load("X_test_regression1.npy")
-# print(" R squared Lasso is", round(lasso.score(x, y), 5))
-# print(" R squared Ridge is", round(ridge.score(x, y), 5))
-# print(" R squared LassoCV is", round(lasso_cv.score(x, y), 5))
-# print(" R squared RidgeCV is", round(ridge_cv.score(x, y), 5))
+""" x_test = np.load("X_test_regression1.npy")
 
 design_matrix_test = np.hstack((np.ones((len(x_test), 1)), x_test))
 expected_y_test = design_matrix_test.dot(beta)
-# print("Predictor Results: \n", expected_y_test)
+# print("Predictor Results: \n", expected_y_test) """
 
-max_alpha = max(r_values_ridge)
-print(max_alpha)
-print(r_values_ridge)
 
-plt.figure()
-plt.plot(alphas, r_values_lasso, label=r"Lasso", color="green", linewidth=3, alpha=0.6)
-plt.xlabel(r"\textbf{Alpha [$\alpha$]}")
-# plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
-plt.title(r"\textbf{Lasso - Coefficient of Determination [$R^2$]}")
-plt.grid(True)
-plt.savefig("/home/user/lasso.eps", format="eps", dpi=300, bbox_inches="tight")
-# plt.legend()
-
-plt.figure()
-plt.plot(alphas, r_values_ridge, label=r"Ridge", color="orange", linewidth=3, alpha=0.6)
-plt.xlabel(r"\textbf{Alpha [$\alpha$]}")
-# plt.ylabel(r"\textbf{Coefficient of Determination [$R^2$]}")
-plt.title(r"\textbf{Ridge - Coefficient of Determination [$R^2$]}")
-plt.grid(True)
-plt.savefig("/home/user/ridge.eps", format="eps", dpi=300, bbox_inches="tight")
-plt.show()
-# plt.legend()
+alphas_ridge = np.arange(0.01, 5, 0.001)
+param_grid = {"alpha": alphas_ridge}
+grid_ridge = Ridge()
+grid_search = GridSearchCV(grid_ridge, param_grid, cv=5, verbose=10)
+grid_search.fit(x, y)
+print(grid_search.best_estimator_)
+print(grid_search.best_params_)
+ridge_model = Ridge(alpha=3.348999999999997)
+ridge_model.fit(x, y)
+print(ridge_model.score(x, y))
+results = cross_validate(ridge_model, x, y, cv=5)
+cv_score = cross_val_score(ridge_model, x, y, cv=5)
+print(cv_score.mean())
+print(np.mean(results["test_score"]))
