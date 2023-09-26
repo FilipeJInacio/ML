@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import Ridge, Lasso
 from sklearn.model_selection import (
     cross_validate,
     cross_val_score,
@@ -44,24 +44,24 @@ alphas_ridge = np.arange(0.01, 5, 0.1)
 param_grid = {'alpha': alphas_ridge}
 
 grid_ridge = Ridge()
-grid_search = GridSearchCV(grid_ridge, param_grid, scoring='neg_mean_squared_error', cv=2, verbose=10)
+grid_search = GridSearchCV(grid_ridge, param_grid, scoring='neg_mean_squared_error', cv=2)
 grid_search.fit(x, y)
 
 print(grid_search.best_estimator_)
 print(grid_search.best_params_)
 
-ridge_model = Ridge(alpha=3.999)
+ridge_model = Lasso(alpha=1)
 ridge_model.fit(x_train_scaled, y_train)
 
 # print(ridge_model.score(x, y))
 
-cv_results_sse = cross_val_score(ridge_model, x_train_scaled, y_train, cv=2, scoring='neg_mean_squared_error', error_score='raise')
-cv_results_r2 = cross_val_score(ridge_model, x_train_scaled, y_train, cv=2, scoring='r2', error_score='raise')
-cv_results = cross_validate(ridge_model, x_train_scaled, y_train, cv=2, scoring=['r2', 'neg_mean_squared_error'], return_train_score=True, error_score='raise')
+cv_results_sse = cross_val_score(ridge_model, x_train_scaled, y_train, cv=5, scoring='neg_mean_squared_error', error_score='raise')
+cv_results_r2 = cross_val_score(ridge_model, x_train_scaled, y_train, cv=5, scoring='r2', error_score='raise')
+cv_results = cross_validate(ridge_model, x_train_scaled, y_train, cv=5, scoring=['r2', 'neg_mean_squared_error'], return_train_score=True, error_score='raise')
 
-print(f"R2 Validate:{(cv_results['test_neg_mean_squared_error'].mean())*15} \n R2 Score:{cv_results_r2.mean()} \n")
+print(f"R2 Validate:{abs(cv_results['test_neg_mean_squared_error'].mean())*5} \n R2 Score:{cv_results_r2.mean()} \n")
 
-SSE = abs(cv_results_sse.mean()) * N
+SSE = abs(cv_results_sse.mean()) * 5
 r2 = cv_results_r2.mean()
 r2_true = cv_results
 
