@@ -1,3 +1,4 @@
+
 import numpy as np
 from sklearn.linear_model import LinearRegression,Ridge,Lasso
 from sklearn.metrics import mean_squared_error, r2_score
@@ -5,7 +6,10 @@ from sklearn.model_selection import cross_val_score, KFold
 import math
 from itertools import combinations
 import time
-
+import matplotlib.pyplot as plt
+import random
+seed = 1
+random.seed(seed)
 from data_spliter import split_data
 
 x = np.load("X_train_regression1.npy")
@@ -40,13 +44,13 @@ if method == 2 or method == 0:
 if method == 3 or method == 0:
     linear_regression = LinearRegression()
     linear_regression.fit(x, y)
-    
+
     # Make predictions using the model
     y_pred = linear_regression.predict(x)
 
     sse = mean_squared_error(y, y_pred) * len(y)
     r_squared = r2_score(y, y_pred)
-    
+
     print("=============Linear Regression=============")
     print("Error: %.4f" % sse)
     print("R2: %.4f" % r_squared)
@@ -130,7 +134,7 @@ if method == 8 or method == 0:
 if method == 9 or method == 0:
     
     values = []
-    subset_sizes = [2]
+    subset_sizes = [3]
     
     # Alphas values
     start = 0.01
@@ -153,13 +157,79 @@ if method == 9 or method == 0:
             
             values.append([alpha,subset_size,sum(values2[:][0]) / len(values2[:][0]), sum(values2[:][1]) / len(values2[:][1])])
                 
-        
-    
-    print("=============Cross Validation=============")
-    print(values)
-
     
     with open("ridge_crossV.txt", "w") as file:
         for alpha,subset_size,value1,value2 in values:
             file.write(f"{alpha}\t{subset_size}\t{value1}\t{value2}\n")
+
+if method == 10:
+
+    fig, axs = plt.subplots(2, 5, figsize=(12, 6))
+
+    # Plot data on each subplot
+    axs[0, 0].scatter([row[0] for row in x], y.T[0])
+    axs[0, 0].set_title('1')
+
+    axs[0, 1].scatter([row[1] for row in x], y.T[0])
+    axs[0, 1].set_title('2')
+
+    axs[0, 2].scatter([row[2] for row in x], y.T[0])
+    axs[0, 2].set_title('3')
+
+    axs[0, 3].scatter([row[3] for row in x], y.T[0])
+    axs[0, 3].set_title('4')
+
+    axs[0, 4].scatter([row[4] for row in x], y.T[0])
+    axs[0, 4].set_title('5')
+
+    axs[1, 0].scatter([row[5] for row in x], y.T[0])
+    axs[1, 0].set_title('6')
+
+    axs[1, 1].scatter([row[6] for row in x], y.T[0])
+    axs[1, 1].set_title('7')
+
+    axs[1, 2].scatter([row[7] for row in x], y.T[0])
+    axs[1, 2].set_title('8')
     
+    axs[1, 3].scatter([row[8] for row in x], y.T[0])
+    axs[1, 3].set_title('9')
+    
+    axs[1, 4].scatter([row[9] for row in x], y.T[0])
+    axs[1, 4].set_title('10')
+
+    # Adjust spacing between subplots
+    plt.tight_layout()
+
+    # Show the plots
+    plt.show()
+
+if method == 11 or method == 0:
+    
+    values = []
+    subset_sizes = [3]
+    
+    # Alphas values
+    start = 0.01
+    end = 1000
+    step = 0.01
+    alphas = np.arange(start, end + step, step)
+    
+    for subset_size in subset_sizes:
+        x_test, x_train, y_test, y_train = split_data(x, y, subset_size)
+    
+        for alpha in alphas:
+            ridge = Ridge(alpha=alpha)
+            
+            values2 = []
+            for i in range(len(x_test)):
+                ridge.fit(x_train[i], y_train[i])
+                y_pred = ridge.predict(x_test[i])**2
+                values2.append([r2_score(y_test[i], y_pred),np.sum((y_test[i] - y_pred)**2)])
+            
+            
+            values.append([alpha,subset_size,sum(values2[:][0]) / len(values2[:][0]), sum(values2[:][1]) / len(values2[:][1])])
+                
+    
+    with open("ridge_crossV.txt", "w") as file:
+        for alpha,subset_size,value1,value2 in values:
+            file.write(f"{alpha}\t{subset_size}\t{value1}\t{value2}\n")
